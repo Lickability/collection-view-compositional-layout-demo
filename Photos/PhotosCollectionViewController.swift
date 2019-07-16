@@ -8,6 +8,13 @@
 
 import UIKit
 
+
 final class PhotosCollectionViewController: UICollectionViewController {
+    private let networkController: Networking = URLSession.shared
     
+    override func viewDidLoad() {
+        networkController.performRequest(PhotosRequest()) { (result: Result<[Photo], NetworkError>) in
+            print(result)
+        }
+    }
 }

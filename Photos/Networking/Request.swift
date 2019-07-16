@@ -1,13 +1,13 @@
 //
-//  SceneDelegate.swift
+//  Request.swift
 //  Photos
 //
 //  Created by Michael Liberatore on 7/16/19.
 //  Copyright © 2019 Lickability. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-    var window: UIWindow?
+protocol Request {
+    var urlRequest: URLRequest { get }
 }
