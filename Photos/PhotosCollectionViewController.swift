@@ -1,5 +1,5 @@
 //
-//  SceneDelegate.swift
+//  PhotosCollectionViewController.swift
 //  Photos
 //
 //  Created by Michael Liberatore on 7/16/19.
@@ -8,7 +8,6 @@
 
 import UIKit
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-    var window: UIWindow?
+final class PhotosCollectionViewController: UICollectionViewController {
+    
 }
-
