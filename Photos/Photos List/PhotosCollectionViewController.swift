@@ -12,18 +12,41 @@ import UIKit
 final class PhotosCollectionViewController: UICollectionViewController {
     private let networkController: Networking = URLSession.shared
     private var photos: [Photo] = []
-    
-    private var flowLayout: UICollectionViewFlowLayout? {
-        return collectionViewLayout as? UICollectionViewFlowLayout
-    }
+	
+	private let flowLayout: UICollectionViewFlowLayout = {
+		let layout = UICollectionViewFlowLayout()
+		layout.minimumInteritemSpacing = 5
+        layout.minimumLineSpacing = 5
+		layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+		return layout
+	}()
+	
+	private let compositionalLayout: UICollectionViewCompositionalLayout = {
+		let fraction: CGFloat = 1.0 / 3.0
+		
+		// Item
+		let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+		item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+		
+		// Group
+		let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(fraction))
+		let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+		
+		// Section
+        let section = NSCollectionLayoutSection(group: group)
+		section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+		
+        
+		return UICollectionViewCompositionalLayout(section: section)
+	}()
 	
 	// MARK: - UIViewController
     
     override func viewDidLoad() {
         collectionView.register(UINib(nibName: "PhotoCell", bundle: nil), forCellWithReuseIdentifier: "PhotoCell")
-        flowLayout?.minimumInteritemSpacing = 5
-        flowLayout?.minimumLineSpacing = 5
-        flowLayout?.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+		collectionView.collectionViewLayout = compositionalLayout
+		
         networkController.performRequest(PhotosRequest()) { [weak self] (result: Result<[Photo], NetworkError>) in
             switch result {
             case .success(let photos):
@@ -59,15 +82,20 @@ extension PhotosCollectionViewController {
 }
 
 extension PhotosCollectionViewController: UICollectionViewDelegateFlowLayout {
-	
+
 	// MARK: - UICollectionViewDelegateFlowLayout
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.bounds.width
         let numberOfItemsPerRow: CGFloat = 3
         let spacing: CGFloat = 5
         let availableWidth = width - spacing * (numberOfItemsPerRow + 1)
         let itemDimension = floor(availableWidth / numberOfItemsPerRow)
-        return CGSize(width: itemDimension, height: itemDimension)
+		return CGSize(width: itemDimension, height: itemDimension)
+
+//		let width = collectionView.bounds.width
+//		let numberOfItemsPerRow: CGFloat = 3
+//		let itemDimension = floor(width / numberOfItemsPerRow)
+//      return CGSize(width: itemDimension, height: itemDimension)
     }
 }
