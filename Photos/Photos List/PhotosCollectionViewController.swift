@@ -13,6 +13,13 @@ final class PhotosCollectionViewController: UICollectionViewController {
     private let networkController: Networking = URLSession.shared
     private var photos: [Photo] = []
 	
+	private var dataSource: PhotosDataSource? {
+		didSet {
+			collectionView.dataSource = dataSource
+			collectionView.reloadData()
+		}
+	}
+	
 	private let flowLayout: UICollectionViewFlowLayout = {
 		let layout = UICollectionViewFlowLayout()
 		layout.minimumInteritemSpacing = 5
@@ -44,40 +51,22 @@ final class PhotosCollectionViewController: UICollectionViewController {
 	// MARK: - UIViewController
     
     override func viewDidLoad() {
-        collectionView.register(UINib(nibName: "PhotoCell", bundle: nil), forCellWithReuseIdentifier: "PhotoCell")
 		collectionView.collectionViewLayout = compositionalLayout
 		
         networkController.performRequest(PhotosRequest()) { [weak self] (result: Result<[Photo], NetworkError>) in
             switch result {
             case .success(let photos):
                 DispatchQueue.main.async {
-                    self?.photos = photos
-                    self?.collectionView.reloadData()
+					guard let self = self else {
+						return
+					}
+					
+					self.dataSource = PhotosDataSource(photos: photos, sectionStyle: .single, collectionView: self.collectionView)
                 }
             case .failure(let error):
                 print(error)
             }
         }
-    }
-}
-
-extension PhotosCollectionViewController {
-	
-	// MARK: - UICollectionViewDataSource
-	
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photos.count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as? PhotoCell else {
-             return UICollectionViewCell()
-        }
-        
-        let photo = photos[indexPath.item]
-        cell.viewModel = PhotoCell.ViewModel(identifier: photo.id, imageURL: photo.thumbnailUrl)
-        
-        return cell
     }
 }
 
