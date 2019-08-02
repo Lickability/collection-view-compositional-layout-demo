@@ -42,16 +42,70 @@ final class PhotosCollectionViewController: UICollectionViewController {
 		
 		// Section
         let section = NSCollectionLayoutSection(group: group)
-		section.contentInsets = NSDirectionalEdgeInsets(top: 2.5, leading: 2.5, bottom: 2.5, trailing: 2.5)
-		
+		section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 2.5, bottom: 0, trailing: 2.5)
         
+		return UICollectionViewCompositionalLayout(section: section)
+	}()
+	
+	private let multiSectionCompositionalLayout: UICollectionViewCompositionalLayout = {
+		return UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
+			let countPerRow = environment.traitCollection.horizontalSizeClass == .compact ? sectionIndex + 3 : (sectionIndex + 3) * 2
+			
+			// Item
+			let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(150), heightDimension: .fractionalHeight(1))
+			let item = NSCollectionLayoutItem(layoutSize: itemSize)
+			item.contentInsets = NSDirectionalEdgeInsets(top: 2.5, leading: 2.5, bottom: 2.5, trailing: 2.5)
+			
+			// Group
+			let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(1.0 / CGFloat(countPerRow)))
+			let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: countPerRow)
+			
+			let supplementaryItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), elementKind: "header", alignment: .top)
+			supplementaryItem.pinToVisibleBounds = true
+			
+			// Section
+			let section = NSCollectionLayoutSection(group: group)
+			section.contentInsets = NSDirectionalEdgeInsets(top: 2.5, leading: 2.5, bottom: 2.5, trailing: 2.5)
+			section.boundarySupplementaryItems = [supplementaryItem]
+			
+			return section
+		}
+	}()
+	
+	private let nestedGroupCompositionalLayout: UICollectionViewCompositionalLayout = {
+		// Item
+		let largeItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1)))
+		largeItem.contentInsets = NSDirectionalEdgeInsets(top: 2.5, leading: 2.5, bottom: 2.5, trailing: 2.5)
+		
+		let smallItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.5)))
+		smallItem.contentInsets = NSDirectionalEdgeInsets(top: 2.5, leading: 2.5, bottom: 2.5, trailing: 2.5)
+		
+		// Inner Group
+		let verticalGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.25), heightDimension: .fractionalHeight(1))
+		let verticalGroup = NSCollectionLayoutGroup.vertical(layoutSize: verticalGroupSize, subitems: [smallItem])
+		
+		// Outer Group
+		let mainGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.5))
+		let mainGroup = NSCollectionLayoutGroup.horizontal(layoutSize: mainGroupSize, subitems: [largeItem, verticalGroup, verticalGroup])
+		
+		let supplementaryItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), elementKind: "header", alignment: .top)
+		
+		// Section
+		let section = NSCollectionLayoutSection(group: mainGroup)
+		section.boundarySupplementaryItems = [supplementaryItem]
+		section.orthogonalScrollingBehavior = .continuous
+		
+//		section.visibleItemsInvalidationHandler = { (items, point, something) in
+//			items.forEach { $0.transform = CGAffineTransform(scaleX: abs(1 - (point.x / 1000)), y: abs(1 - (point.x / 1000))) }
+//		}
+		
 		return UICollectionViewCompositionalLayout(section: section)
 	}()
 	
 	// MARK: - UIViewController
     
     override func viewDidLoad() {
-		collectionView.collectionViewLayout = compositionalLayout
+		collectionView.collectionViewLayout = nestedGroupCompositionalLayout
 		
         networkController.performRequest(PhotosRequest()) { [weak self] (result: Result<[Photo], NetworkError>) in
             switch result {
@@ -61,7 +115,7 @@ final class PhotosCollectionViewController: UICollectionViewController {
 						return
 					}
 					
-					self.dataSource = PhotosDataSource(photos: photos, sectionStyle: .single, collectionView: self.collectionView)
+					self.dataSource = PhotosDataSource(photos: photos, sectionStyle: .byAlbum, collectionView: self.collectionView)
                 }
             case .failure(let error):
                 print(error)
