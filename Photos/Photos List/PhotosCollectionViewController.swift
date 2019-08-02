@@ -102,10 +102,46 @@ final class PhotosCollectionViewController: UICollectionViewController {
 		return UICollectionViewCompositionalLayout(section: section)
 	}()
 	
+	private let zoomingCardLayout: UICollectionViewCompositionalLayout = {
+		let fraction: CGFloat = 1.0 / 3.0
+		
+		// Item
+		let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+		item.contentInsets = NSDirectionalEdgeInsets(top: 2.5, leading: 2.5, bottom: 2.5, trailing: 2.5)
+		
+		// Group
+		let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(fraction))
+		let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+		
+		let supplementaryItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), elementKind: "header", alignment: .top)
+
+		// Section
+        let section = NSCollectionLayoutSection(group: group)
+		section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 2.5, bottom: 0, trailing: 2.5)
+		section.boundarySupplementaryItems = [supplementaryItem]
+		section.orthogonalScrollingBehavior = .continuous
+		section.visibleItemsInvalidationHandler = { (items, offset, _) in
+			guard items.count > 3 else { return }
+			print("frame x: \(items[3].frame.midX)")
+			print("offset x: \(offset.x)")
+//			print("frame: \(item.frame)")
+//			print("bounds: \(item.bounds)")
+//			for item in items where item.representedElementCategory == .cell {
+//				print(offset)
+//				print(
+//				print("frame: \(item.frame)")
+//				print("bounds: \(item.bounds)")
+//			}
+		}
+        
+		return UICollectionViewCompositionalLayout(section: section)
+	}()
+	
 	// MARK: - UIViewController
     
     override func viewDidLoad() {
-		collectionView.collectionViewLayout = nestedGroupCompositionalLayout
+		collectionView.collectionViewLayout = zoomingCardLayout
 		
         networkController.performRequest(PhotosRequest()) { [weak self] (result: Result<[Photo], NetworkError>) in
             switch result {
