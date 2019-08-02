@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14854.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14806.4"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="eLU-AE-UQg" customClass="HeaderSupplementaryView" customModule="Photos" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="55"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aWY-To-EAG">
+                    <rect key="frame" x="2" y="0.0" width="410" height="55"/>
+                    <color key="backgroundColor" white="0.85683893392608079" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CrS-UC-ZeR">
+                    <rect key="frame" x="20" y="15" width="374" height="25"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="uHi-c5-rE3" firstAttribute="bottom" secondItem="CrS-UC-ZeR" secondAttribute="bottom" constant="15" id="FsC-fI-LuY"/>
+                <constraint firstItem="CrS-UC-ZeR" firstAttribute="leading" secondItem="eLU-AE-UQg" secondAttribute="leading" constant="20" id="U8n-O0-o8V"/>
+                <constraint firstItem="CrS-UC-ZeR" firstAttribute="top" secondItem="eLU-AE-UQg" secondAttribute="top" constant="15" id="Vaa-uH-gEB"/>
+                <constraint firstAttribute="trailing" secondItem="CrS-UC-ZeR" secondAttribute="trailing" constant="20" id="XQ2-Ln-8pA"/>
+                <constraint firstItem="aWY-To-EAG" firstAttribute="top" secondItem="eLU-AE-UQg" secondAttribute="top" id="Z4A-LG-Amy"/>
+                <constraint firstItem="uHi-c5-rE3" firstAttribute="trailing" secondItem="aWY-To-EAG" secondAttribute="trailing" constant="2" id="ZZ6-ux-dxK"/>
+                <constraint firstItem="aWY-To-EAG" firstAttribute="leading" secondItem="uHi-c5-rE3" secondAttribute="leading" constant="2" id="d2S-go-1an"/>
+                <constraint firstAttribute="bottom" secondItem="aWY-To-EAG" secondAttribute="bottom" id="ySs-bI-jLX"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="uHi-c5-rE3"/>
+            <connections>
+                <outlet property="label" destination="CrS-UC-ZeR" id="Rb6-nX-DZl"/>
+            </connections>
+            <point key="canvasLocation" x="-181.15942028985509" y="104.12946428571428"/>
+        </collectionReusableView>
+    </objects>
+</document>

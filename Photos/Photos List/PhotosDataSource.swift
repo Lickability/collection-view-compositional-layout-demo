@@ -44,6 +44,10 @@ class PhotosDataSource: NSObject {
 		case byAlbum
 	}
 	
+	/// Creates a new instance of `PhotosDataSource`.
+	/// - Parameter photos: The photo models that comprise the data source.
+	/// - Parameter sectionStyle: How items are distributed across sections.
+	/// - Parameter collectionView: The collection view in which to register cells and supplementary views.
 	init(photos: [Photo], sectionStyle: SectionStyle, collectionView: UICollectionView) {
 		switch sectionStyle {
 		case .single:
@@ -81,6 +85,7 @@ class PhotosDataSource: NSObject {
 	
 	private func registerCells(in collectionView: UICollectionView) {
 		collectionView.register(UINib(nibName: "PhotoCell", bundle: nil), forCellWithReuseIdentifier: "PhotoCell")
+		collectionView.register(UINib(nibName: "HeaderSupplementaryView", bundle: nil), forSupplementaryViewOfKind: "header", withReuseIdentifier: "HeaderSupplementaryView")
 	}
 }
 
@@ -106,4 +111,14 @@ extension PhotosDataSource: UICollectionViewDataSource {
         
         return cell
     }
+	
+	func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+		guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: "header", withReuseIdentifier: "HeaderSupplementaryView", for: indexPath) as? HeaderSupplementaryView else {
+			return HeaderSupplementaryView()
+		}
+		
+		headerView.viewModel = HeaderSupplementaryView.ViewModel(title: "Section \(indexPath.section + 1)")
+		
+		return headerView
+	}
 }
