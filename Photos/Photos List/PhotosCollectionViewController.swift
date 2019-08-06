@@ -106,33 +106,28 @@ final class PhotosCollectionViewController: UICollectionViewController {
 		let fraction: CGFloat = 1.0 / 3.0
 		
 		// Item
-		let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1))
+		let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-		item.contentInsets = NSDirectionalEdgeInsets(top: 2.5, leading: 2.5, bottom: 2.5, trailing: 2.5)
 		
 		// Group
-		let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(fraction))
+		let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalWidth(fraction))
 		let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-		
-		let supplementaryItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), elementKind: "header", alignment: .top)
+        group.contentInsets = NSDirectionalEdgeInsets(top: 2.5, leading: 5, bottom: 2.5, trailing: 5)
 
 		// Section
         let section = NSCollectionLayoutSection(group: group)
-		section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 2.5, bottom: 0, trailing: 2.5)
-		section.boundarySupplementaryItems = [supplementaryItem]
-		section.orthogonalScrollingBehavior = .continuous
-		section.visibleItemsInvalidationHandler = { (items, offset, _) in
-			guard items.count > 3 else { return }
-			print("frame x: \(items[3].frame.midX)")
-			print("offset x: \(offset.x)")
-//			print("frame: \(item.frame)")
-//			print("bounds: \(item.bounds)")
-//			for item in items where item.representedElementCategory == .cell {
-//				print(offset)
-//				print(
-//				print("frame: \(item.frame)")
-//				print("bounds: \(item.bounds)")
-//			}
+		section.contentInsets = NSDirectionalEdgeInsets(top: 100, leading: 2.5, bottom: 0, trailing: 2.5)
+		section.orthogonalScrollingBehavior = .groupPagingCentered
+		section.visibleItemsInvalidationHandler = { (items, offset, environment) in
+
+            items.forEach { item in
+                let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
+                let minScale: CGFloat = 0.1
+                let maxScale: CGFloat = 1.5
+                let scale = max(maxScale - (distanceFromCenter / environment.container.contentSize.width), minScale)
+                item.transform = CGAffineTransform(scaleX: scale, y: scale)
+                //item.zIndex = Int(scale * 100)
+            }
 		}
         
 		return UICollectionViewCompositionalLayout(section: section)
