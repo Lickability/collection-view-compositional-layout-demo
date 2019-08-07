@@ -95,6 +95,7 @@ final class PhotosCollectionViewController: UICollectionViewController {
 		section.boundarySupplementaryItems = [supplementaryItem]
 		section.orthogonalScrollingBehavior = .continuous
 		
+		// Uncomment for a fun animation when scrolling…
 //		section.visibleItemsInvalidationHandler = { (items, point, something) in
 //			items.forEach { $0.transform = CGAffineTransform(scaleX: abs(1 - (point.x / 1000)), y: abs(1 - (point.x / 1000))) }
 //		}
@@ -135,7 +136,7 @@ final class PhotosCollectionViewController: UICollectionViewController {
 	// MARK: - UIViewController
     
     override func viewDidLoad() {
-		collectionView.collectionViewLayout = zoomingCardLayout
+		collectionView.collectionViewLayout = nestedGroupCompositionalLayout
 		
         networkController.performRequest(PhotosRequest()) { [weak self] (result: Result<[Photo], NetworkError>) in
             switch result {
@@ -165,10 +166,5 @@ extension PhotosCollectionViewController: UICollectionViewDelegateFlowLayout {
         let availableWidth = width - spacing * (numberOfItemsPerRow + 1)
         let itemDimension = floor(availableWidth / numberOfItemsPerRow)
 		return CGSize(width: itemDimension, height: itemDimension)
-
-//		let width = collectionView.bounds.width
-//		let numberOfItemsPerRow: CGFloat = 3
-//		let itemDimension = floor(width / numberOfItemsPerRow)
-//      return CGSize(width: itemDimension, height: itemDimension)
     }
 }
