@@ -8,6 +8,11 @@
 
 import Foundation
 
+/// Describes a type capable of making network requests.
 protocol Networking {
+    
+    /// Performs the specified request.
+    /// - Parameter request: The request to perform.
+    /// - Parameter completion: Closure called upon success or failure.
     func performRequest<T: Decodable>(_ request: Request, completion: @escaping (Result<T, NetworkError>) -> Void)
 }

@@ -8,6 +8,9 @@
 
 import Foundation
 
+/// Describes a request.
 protocol Request {
+    
+    /// A `URLRequest` representation of the receiver.
     var urlRequest: URLRequest { get }
 }

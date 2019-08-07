@@ -119,7 +119,6 @@ final class PhotosCollectionViewController: UICollectionViewController {
 		section.contentInsets = NSDirectionalEdgeInsets(top: 100, leading: 2.5, bottom: 0, trailing: 2.5)
 		section.orthogonalScrollingBehavior = .groupPagingCentered
 		section.visibleItemsInvalidationHandler = { (items, offset, environment) in
-
             items.forEach { item in
                 let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
                 let minScale: CGFloat = 0.1
