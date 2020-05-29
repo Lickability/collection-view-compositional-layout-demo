@@ -41,19 +41,18 @@ class PhotosDataSource: NSObject {
 		case single
 		
 		/// Items are distributed across multiple sections based on their album identifier.
-		case byAlbum
+        case byAlbum(maximumItemsPerAlbum: Int?, maximumNumberOfAlbums: Int?)
 	}
 	
 	/// Creates a new instance of `PhotosDataSource`.
 	/// - Parameter photos: The photo models that comprise the data source.
 	/// - Parameter sectionStyle: How items are distributed across sections.
-	/// - Parameter collectionView: The collection view in which to register cells and supplementary views.
-	init(photos: [Photo], sectionStyle: SectionStyle, collectionView: UICollectionView) {
+	init(photos: [Photo], sectionStyle: SectionStyle) {
 		switch sectionStyle {
 		case .single:
 			self.sections = [Section(items: photos.map { Section.Item(identifier: $0.id, title: $0.title, thumbnailURL: $0.thumbnailUrl)})]
 			
-		case .byAlbum:
+        case .byAlbum(let maximumItemsPerAlbum, let maximumNumberOfAlbums):
 			var sectionNumberToItems: [Int: [Section.Item]] = [:]
 			
 			for photo in photos {
@@ -69,9 +68,9 @@ class PhotosDataSource: NSObject {
 			let sortedKeys = sectionNumberToItems.keys.sorted()
 			
 			var sections: [Section] = []
-			for key in sortedKeys {
+            for key in Array(sortedKeys.prefix(maximumNumberOfAlbums ?? sortedKeys.count)) {
 				guard let items = sectionNumberToItems[key] else { continue }
-				sections.append(Section(items: items))
+                sections.append(Section(items: Array(items.prefix(maximumItemsPerAlbum ?? items.count))))
 			}
 			
 			self.sections = sections
@@ -79,13 +78,6 @@ class PhotosDataSource: NSObject {
 		
 				
 		super.init()
-		
-		registerCells(in: collectionView)
-	}
-	
-	private func registerCells(in collectionView: UICollectionView) {
-		collectionView.register(UINib(nibName: "PhotoCell", bundle: nil), forCellWithReuseIdentifier: "PhotoCell")
-		collectionView.register(UINib(nibName: "HeaderSupplementaryView", bundle: nil), forSupplementaryViewOfKind: "header", withReuseIdentifier: "HeaderSupplementaryView")
 	}
 }
 
