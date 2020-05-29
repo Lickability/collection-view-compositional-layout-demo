@@ -113,7 +113,7 @@ extension PhotosDataSource: UICollectionViewDataSource {
     }
 	
 	func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-		guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: "header", withReuseIdentifier: "HeaderSupplementaryView", for: indexPath) as? HeaderSupplementaryView else {
+		guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderSupplementaryView", for: indexPath) as? HeaderSupplementaryView else {
 			return HeaderSupplementaryView()
 		}
 		
