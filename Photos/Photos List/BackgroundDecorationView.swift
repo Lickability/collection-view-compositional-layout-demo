@@ -8,8 +8,8 @@
 
 import UIKit
 
-/// A basic supplementary view used for section backgrounds.
-final class BackgroundSupplementaryView: UICollectionReusableView {
+/// A basic decoration view used for section backgrounds.
+final class BackgroundDecorationView: UICollectionReusableView {
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)

@@ -136,7 +136,7 @@ final class LayoutSelectionTableViewController: UITableViewController {
             section.decorationItems = [backgroundItem]
             
             let layout = UICollectionViewCompositionalLayout(section: section)
-            layout.register(BackgroundSupplementaryView.self, forDecorationViewOfKind: "background")
+            layout.register(BackgroundDecorationView.self, forDecorationViewOfKind: "background")
             return layout
         }()
         
