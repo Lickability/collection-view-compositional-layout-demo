@@ -108,6 +108,38 @@ final class LayoutSelectionTableViewController: UITableViewController {
         return PhotosCollectionViewController(collectionViewLayout: compositionalLayout, dataSource: dataSource, coder: coder)
     }
     
+    // MARK: Item-Based Supplementary Items
+    
+    @IBSegueAction private func makeCompositionalLayoutViewControllerWithItemBasedSupplementaryItems(_ coder: NSCoder) -> PhotosCollectionViewController? {
+        let compositionalLayout: UICollectionViewCompositionalLayout = {
+            let fraction: CGFloat = 1 / 3
+            let inset: CGFloat = 8
+                        
+            // Supplementary Item
+            let layoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.1), heightDimension: .absolute(30))
+            let containerAnchor = NSCollectionLayoutAnchor(edges: [.bottom], absoluteOffset: CGPoint(x: 0, y: 10))
+            let supplementaryItem = NSCollectionLayoutSupplementaryItem(layoutSize: layoutSize, elementKind: "new-banner", containerAnchor: containerAnchor)
+
+            // Item
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize, supplementaryItems: [supplementaryItem])
+            item.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
+            
+            // Group
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(fraction))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+            
+            // Section
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
+
+            return UICollectionViewCompositionalLayout(section: section)
+        }()
+        
+        let dataSource = PhotosDataSource(photos: photos, sectionStyle: .single)
+        return PhotosCollectionViewController(collectionViewLayout: compositionalLayout, dataSource: dataSource, coder: coder)
+    }
+    
     // MARK: Background Decoration Items
     
     @IBSegueAction private func makeCompositionalLayoutViewControllerWithBackgroundDecorations(_ coder: NSCoder) -> PhotosCollectionViewController? {
