@@ -104,13 +104,24 @@ extension PhotosDataSource: UICollectionViewDataSource {
         return cell
     }
 	
-	func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-		guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderSupplementaryView", for: indexPath) as? HeaderSupplementaryView else {
-			return HeaderSupplementaryView()
-		}
-		
-		headerView.viewModel = HeaderSupplementaryView.ViewModel(title: "Section \(indexPath.section + 1)")
-		
-		return headerView
-	}
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case "header":
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderSupplementaryView", for: indexPath) as? HeaderSupplementaryView else {
+                return HeaderSupplementaryView()
+            }
+            
+            headerView.viewModel = HeaderSupplementaryView.ViewModel(title: "Section \(indexPath.section + 1)")
+            return headerView
+            
+        case "new-banner":
+            let bannerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "NewBannerSupplementaryView", for: indexPath)
+            bannerView.isHidden = indexPath.row % 5 != 0 // show on every 5th item
+            return bannerView
+            
+        default:
+            assertionFailure("Unexpected element kind: \(kind).")
+            return UICollectionReusableView()
+        }
+    }
 }
