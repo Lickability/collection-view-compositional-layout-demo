@@ -72,6 +72,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B548F022494061B00DA103A /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				4CB3B2A422DFBBAB0006F396 /* PhotoCell.swift */,
+				4CB3B2A622DFBBB30006F396 /* PhotoCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		0B548F032494063300DA103A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4C0F1E3B22F4B5BE0059DB83 /* HeaderSupplementaryView.swift */,
+				0B5EE932246F076800064B95 /* BackgroundDecorationView.swift */,
+				4C0F1E3922F4B5700059DB83 /* HeaderSupplementaryView.xib */,
+				4CC61F6B248AC36F00AB26A1 /* NewBannerSupplementaryView.swift */,
+				4CC61F69248AC16400AB26A1 /* NewBannerSupplementaryView.xib */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		4C452DCC2481885200B650CA /* Layout Selection */ = {
 			isa = PBXGroup;
 			children = (
@@ -102,12 +123,14 @@
 			isa = PBXGroup;
 			children = (
 				4C452DCC2481885200B650CA /* Layout Selection */,
+				4CB3B2A322DFBB8A0006F396 /* Photos List */,
+				0B548F032494063300DA103A /* Views */,
+				0B548F022494061B00DA103A /* Cells */,
 				4CB6B5B222DE64F80084F3A3 /* Models */,
 				4C478EE422DE11B4007579BC /* Networking */,
 				4C478ECB22DE0D51007579BC /* AppDelegate.swift */,
 				4C478ECD22DE0D51007579BC /* SceneDelegate.swift */,
 				4C478ED122DE0D51007579BC /* Main.storyboard */,
-				4CB3B2A322DFBB8A0006F396 /* Photos List */,
 				4CB6B5AF22DE61EF0084F3A3 /* Supporting Files */,
 			);
 			path = Photos;
@@ -129,14 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				4C478EDF22DE0DF6007579BC /* PhotosCollectionViewController.swift */,
-				4CB3B2A422DFBBAB0006F396 /* PhotoCell.swift */,
-				4CB3B2A622DFBBB30006F396 /* PhotoCell.xib */,
 				4C0F1E3722F4A4FB0059DB83 /* PhotosDataSource.swift */,
-				4C0F1E3B22F4B5BE0059DB83 /* HeaderSupplementaryView.swift */,
-				0B5EE932246F076800064B95 /* BackgroundDecorationView.swift */,
-				4C0F1E3922F4B5700059DB83 /* HeaderSupplementaryView.xib */,
-				4CC61F6B248AC36F00AB26A1 /* NewBannerSupplementaryView.swift */,
-				4CC61F69248AC16400AB26A1 /* NewBannerSupplementaryView.xib */,
 			);
 			path = "Photos List";
 			sourceTree = "<group>";
