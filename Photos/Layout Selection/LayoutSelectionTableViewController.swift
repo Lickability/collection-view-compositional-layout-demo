@@ -53,22 +53,9 @@ final class LayoutSelectionTableViewController: UITableViewController {
     
     @IBSegueAction private func makeBasicGridCompositionalLayoutViewController(_ coder: NSCoder) -> PhotosCollectionViewController? {
         let compositionalLayout: UICollectionViewCompositionalLayout = {
-            let fraction: CGFloat = 1 / 3
-            let inset: CGFloat = 2.5
-            
-            // Item
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1))
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            item.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
-            
-            // Group
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(fraction))
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-            
-            // Section
-            let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
-            
+            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(20)))
+            let containerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(20)), subitems: [item])
+            let section = NSCollectionLayoutSection(group: containerGroup)
             return UICollectionViewCompositionalLayout(section: section)
         }()
         
